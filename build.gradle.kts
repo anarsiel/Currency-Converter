@@ -1,13 +1,7 @@
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
-//plugins {
-////    kotlin("jvm") version "1.4.10"
-//
-//}
-
 plugins {
     kotlin("jvm") version "1.5.30" // or kotlin("multiplatform") or any other kotlin plugin
-    kotlin("plugin.serialization") version "1.5.30"
     application
 }
 
@@ -32,8 +26,6 @@ dependencies {
     implementation("org.jetbrains.kotlinx:kotlinx-html-jvm:0.7.2")
     implementation("org.slf4j:slf4j-api:2.0.0-alpha5")
 
-//    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.2.2")
-//    implementation("org.jetbrains.kotlinx:kotlinx-serialization-runtime-jvm:0.20.0-1.4-M2")
     implementation("org.jetbrains.kotlinx:kotlinx-serialization-core:1.0.0-RC")
     implementation(kotlin("stdlib-jdk8"))
 }
