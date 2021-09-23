@@ -1,5 +1,4 @@
-import io.ktor.application.call
-import io.ktor.client.call.*
+import io.ktor.application.*
 import io.ktor.html.respondHtml
 import io.ktor.http.HttpStatusCode
 import io.ktor.routing.get
@@ -11,17 +10,13 @@ import kotlinx.html.*
 fun main() {
     embeddedServer(Netty, port = 8080, host = "127.0.0.1") {
         routing {
+            val controller = Controller()
+
             get("/converter") {
-                val currencies = getListOfAllCurrencies()
-
-                val fromCurrency = call.request.queryParameters["from"]
-                val toCurrency = call.request.queryParameters["to"]
-
-                if (currencies.containsAll(arrayListOf(fromCurrency, toCurrency))) {
-                    val httpResponse = convert(fromCurrency!!, toCurrency!!)
-                    val responseBody: ByteArray = httpResponse.receive()
-                    val conversionResult = responseBody.toString(Charsets.UTF_8)
-                    val rate = getNumberFromResponse(conversionResult)
+                try {
+                    val fromCurrency = call.request.queryParameters["from"]
+                    val toCurrency = call.request.queryParameters["to"]
+                    val rate = controller.converter(fromCurrency, toCurrency)
 
                     call.respondHtml(HttpStatusCode.OK) {
                         head {
@@ -33,13 +28,22 @@ fun main() {
                             }
                         }
                     }
+                } catch (e: ControllerException) {
+                    call.respondHtml(HttpStatusCode.BadRequest) {
+                        head {
+                            title("Error page")
+                        }
+                        body {
+                            div {
+                                + e.message!!
+                            }
+                        }
+                    }
                 }
-
-
             }
         }
     }.start(wait = true)
 }
 
-// https://free.currconv.com/api/v7/currencies?apiKey=do-not-use-this-api-key-r5IbMpHmWR8_wg07gb4rs
+// https://free.currconv.com/api/v7/currencies?apiKey=
 // http://localhost:8080/converter?from=USD&to=RUB
