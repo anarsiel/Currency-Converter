@@ -16,25 +16,32 @@ repositories {
 }
 
 dependencies {
-    testImplementation(kotlin("test-junit5"))
-    testImplementation("org.junit.jupiter:junit-jupiter-api:5.6.0")
-    testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:5.6.0")
-    implementation("io.ktor:ktor-server-netty:1.4.0")
-    implementation("io.ktor:ktor-client-cio:1.4.0")
-    implementation("io.ktor:ktor-html-builder:1.4.0")
-    implementation("io.ktor:ktor-client-serialization:1.3.2-1.4-M2")
+    val kotlin_version = "1.5.30"
+    val ktor_version = "1.6.3"
+
+    implementation("io.ktor:ktor-server-netty:$ktor_version")
+    implementation("io.ktor:ktor-client-cio:$ktor_version")
+    implementation("io.ktor:ktor-html-builder:$ktor_version")
+    implementation("io.ktor:ktor-client-serialization:$ktor_version")
+//    implementation("io.ktor:ktor-server-netty:1.4.0")
+//    implementation("io.ktor:ktor-client-cio:1.4.0")
+//    implementation("io.ktor:ktor-html-builder:1.4.0")
+//    implementation("io.ktor:ktor-client-serialization:1.3.2-1.4-M2")
     implementation("org.jetbrains.kotlinx:kotlinx-html-jvm:0.7.2")
     implementation("org.slf4j:slf4j-api:2.0.0-alpha5")
 
     implementation("org.jetbrains.kotlinx:kotlinx-serialization-core:1.0.0-RC")
     implementation(kotlin("stdlib-jdk8"))
+    testImplementation("org.jetbrains.kotlin:kotlin-test:$kotlin_version")
+    testImplementation("io.ktor:ktor-server-test-host:$ktor_version")
+    implementation("io.ktor:ktor-gson:$ktor_version")
 }
 
 tasks.test {
     useJUnitPlatform()
 }
 
-tasks.withType<KotlinCompile>() {
+tasks.withType<KotlinCompile> {
     kotlinOptions.jvmTarget = "1.8"
 }
 

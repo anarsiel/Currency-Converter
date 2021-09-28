@@ -4,11 +4,11 @@ class Controller {
         val currencies = converter.getListOfAllCurrencies()
 
         if (!currencies.contains(fromCurrency)) {
-            throw ControllerException("Wrong `from` parameter: '$fromCurrency'")
+            throw ControllerException("Wrong `from` parameter: `$fromCurrency`")
         }
 
         if (!currencies.contains(toCurrency)) {
-            throw ControllerException("Wrong `to` parameter: '$toCurrency'")
+            throw ControllerException("Wrong `to` parameter: `$toCurrency`")
         }
 
         try {

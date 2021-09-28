@@ -1,19 +1,24 @@
-import io.ktor.application.*
-import io.ktor.html.respondHtml
-import io.ktor.http.HttpStatusCode
-import io.ktor.response.*
-import io.ktor.routing.get
-import io.ktor.routing.routing
-import io.ktor.server.engine.embeddedServer
-import io.ktor.server.netty.Netty
-import kotlinx.html.*
+    import io.ktor.application.*
+    import io.ktor.features.*
+    import io.ktor.gson.*
+    import io.ktor.http.*
+    import io.ktor.response.*
+    import io.ktor.routing.*
+    import kotlinx.serialization.SerialName
+    import kotlinx.serialization.Serializable
 
-fun main() {
-    embeddedServer(Netty, port = 8080, host = "127.0.0.1") {
+
+    fun main(args: Array<String>): Unit = io.ktor.server.netty.EngineMain.main(args)
+
+    fun Application.module(testing: Boolean = false) {
+        install(ContentNegotiation) {
+            gson()
+        }
+
         routing {
             val controller = Controller()
 
-            get("/converter") {
+            get("/converter{from}{to}") {
                 try {
                     val fromCurrency = call.request.queryParameters["from"]
                     val toCurrency = call.request.queryParameters["to"]
@@ -31,14 +36,20 @@ fun main() {
                     call.respond(HttpStatusCode.BadRequest, response)
                 }
             }
-        }
-    }.start(wait = true)
-}
 
-data class Response(
-    val converterResponse: String?,
-    val errorMessage: String?
-)
+            get {
+                call.respond(HttpStatusCode.NotFound, Response())
+            }
+        }
+    }
+
+    @Serializable
+    data class Response(
+        @SerialName("converterResponse")
+        val converterResponse: String? = null,
+        @SerialName("errorMessage")
+        val errorMessage: String? = null
+    )
 
 // https://free.currconv.com/api/v7/currencies?apiKey=
 // http://localhost:8080/converter?from=USD&to=RUB
