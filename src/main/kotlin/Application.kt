@@ -1,5 +1,6 @@
 import common.ControllerException
-import controller.Controller
+import config.Config
+import config.Dependencies
 import io.ktor.application.*
 import io.ktor.features.*
 import io.ktor.gson.*
@@ -15,14 +16,15 @@ fun Application.module() {
         gson()
     }
 
-    routing {
-        val controller = Controller()
+    val config = Config()
+    val dependencies = Dependencies(config)
 
+    routing {
         get("/converter{from}{to}") {
             try {
                 val fromCurrency = call.request.queryParameters["from"]
                 val toCurrency = call.request.queryParameters["to"]
-                val rate = controller.converter(fromCurrency, toCurrency)
+                val rate = dependencies.controller.converter(fromCurrency, toCurrency)
                 val response = Response(
                     "1 $fromCurrency = $rate $toCurrency",
                     null

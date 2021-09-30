@@ -1,13 +1,12 @@
 package controller
 
+import config.Dependencies
 import common.ControllerException
-import remote.Converter
 import common.ConverterException
 
-class Controller {
+class Controller(private val dependencies: Dependencies) {
     suspend fun converter(fromCurrency: String?, toCurrency: String?): String {
-        val converter = Converter()
-        val currencies = converter.getListOfAllCurrencies()
+        val currencies = dependencies.converter.getListOfAllCurrencies()
 
         if (!currencies.contains(fromCurrency)) {
             throw ControllerException("Wrong `from` parameter: `$fromCurrency`")
@@ -18,7 +17,7 @@ class Controller {
         }
 
         try {
-            return converter.convert(fromCurrency!!, toCurrency!!)
+            return dependencies.converter.convert(fromCurrency!!, toCurrency!!)
         } catch (e: ConverterException) {
             throw e.message?.let { ControllerException(it) }!!
         }
