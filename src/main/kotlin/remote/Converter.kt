@@ -1,7 +1,6 @@
 package remote
 
 import config.Dependencies
-import common.ConverterException
 import io.ktor.client.call.*
 import io.ktor.client.request.*
 import io.ktor.client.statement.*
@@ -27,12 +26,8 @@ class Converter(private val dependencies: Dependencies) {
     }
 
     private suspend fun getAndToString(request: String): String {
-        try {
-            val httpResponse: HttpResponse = dependencies.httpClient.get(request)
-            val responseBody: ByteArray = httpResponse.receive()
-            return responseBody.toString(Charsets.UTF_8)
-        } catch (e: Exception) {
-            throw e.message?.let { ConverterException(it) }!!
-        }
+        val httpResponse: HttpResponse = dependencies.httpClient.get(request)
+        val responseBody: ByteArray = httpResponse.receive()
+        return responseBody.toString(Charsets.UTF_8)
     }
 }

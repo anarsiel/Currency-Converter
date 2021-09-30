@@ -1,79 +1,57 @@
-import com.google.gson.Gson
 import io.ktor.application.*
 import io.ktor.http.*
 import io.ktor.server.testing.*
+import org.assertj.core.api.Assertions.assertThat
+import remote.*
 import kotlin.test.Test
-import kotlin.test.assertEquals
 
 class ApplicationTest {
     @Test
     fun `Identical Correct Currencies`() {
-        withTestApplication(Application::module) {
+        withTestApplication(Application::converter) {
             handleRequest(HttpMethod.Get, "/converter?from=USD&to=USD").apply {
-                assertEquals(HttpStatusCode.OK, response.status())
-                val expectedResponse = Response("1 USD = 1 USD")
-                assertEquals(
-                    Gson().toJson(expectedResponse),
-                    response.content
-                )
+                val expectedConverterResponse = SuccessfulConverterResponse("1 USD = 1 USD")
+
+                assertThat(HttpStatusCode.OK).isEqualTo(response.status())
+                assertThat(response.content).isEqualTo(serializeResponse(expectedConverterResponse))
             }
         }
     }
 
     @Test
     fun `Incorrect 'from' parameter`() {
-        withTestApplication(Application::module) {
+        withTestApplication(Application::converter) {
             handleRequest(HttpMethod.Get, "/converter?from=INCORRECT&to=USD").apply {
-                assertEquals(HttpStatusCode.BadRequest, response.status())
-                val expectedResponse = Response(
+                val expectedConverterResponse = UnsuccessfulConverterResponse(
                     errorMessage = "common.ControllerException: Wrong `from` parameter: `INCORRECT`"
                 )
-                assertEquals(
-                    Gson().toJson(expectedResponse),
-                    response.content
-                )
+
+                assertThat(HttpStatusCode.InternalServerError).isEqualTo(response.status())
+                assertThat(response.content).isEqualTo(serializeResponse(expectedConverterResponse))
             }
         }
     }
 
     @Test
     fun `Incorrect 'to' parameter`() {
-        withTestApplication(Application::module) {
+        withTestApplication(Application::converter) {
             handleRequest(HttpMethod.Get, "/converter?from=USD&to=INCORRECT").apply {
-                assertEquals(HttpStatusCode.BadRequest, response.status())
-                val expectedResponse = Response(
+                val expectedConverterResponse = UnsuccessfulConverterResponse(
                     errorMessage = "common.ControllerException: Wrong `to` parameter: `INCORRECT`"
                 )
-                assertEquals(
-                    Gson().toJson(expectedResponse),
-                    response.content
-                )
+
+                assertThat(HttpStatusCode.InternalServerError).isEqualTo(response.status())
+                assertThat(response.content).isEqualTo(serializeResponse(expectedConverterResponse))
             }
         }
     }
 
     @Test
     fun `Page not found`() {
-        withTestApplication(Application::module) {
+        withTestApplication(Application::converter) {
             handleRequest(HttpMethod.Get, "/PaGeNoTfOuNd").apply {
-                assertEquals(HttpStatusCode.NotFound, response.status())
-                assertEquals(
-                    null,
-                    response.content
-                )
-            }
-        }
-    }
-
-    @Test
-    fun `Page not found2`() {
-        withTestApplication(Application::module) {
-            handleRequest(HttpMethod.Get, "/PaGeNoTfOuNd").apply {
-                assertEquals(HttpStatusCode.NotFound, response.status())
-                assertEquals(
-                    null,
-                    response.content
-                )
+                assertThat(HttpStatusCode.NotFound).isEqualTo(response.status())
+                assertThat(deserializeResponse(response.content)).isNull()
             }
         }
     }

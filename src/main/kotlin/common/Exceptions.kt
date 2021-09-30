@@ -1,5 +1,7 @@
 package common
 
-class ControllerException(message: String) : Exception("common.ControllerException: $message")
+open class InternalServerException(message: String) : Exception(message)
+class ControllerException(message: String) : InternalServerException(message)
 
-class ConverterException(message: String) : Exception("common.ConverterException: $message")
+open class RemoteException(message: String) : Exception(message)
+class ConverterException(message: String) : RemoteException(message)

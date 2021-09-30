@@ -31,6 +31,8 @@ dependencies {
     testImplementation("org.jetbrains.kotlin:kotlin-test:$kotlin_version")
     testImplementation("io.ktor:ktor-server-test-host:$ktor_version")
     implementation("io.ktor:ktor-gson:$ktor_version")
+    implementation("com.fasterxml.jackson.module:jackson-module-kotlin:2.11.1")
+    testImplementation("org.assertj:assertj-core:3.6.1")
 }
 
 tasks.test {
