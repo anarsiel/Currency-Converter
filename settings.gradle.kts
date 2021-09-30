@@ -1,3 +1,1 @@
-
 rootProject.name = "Currency-Converter"
-

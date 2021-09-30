@@ -5,7 +5,7 @@ import io.ktor.server.testing.*
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
-class ConverterTest {
+class ApplicationTest {
     @Test
     fun `Identical Correct Currencies`() {
         withTestApplication(Application::module) {
@@ -21,12 +21,12 @@ class ConverterTest {
     }
 
     @Test
-    fun `Incorrect "from" parameter`() {
+    fun `Incorrect 'from' parameter`() {
         withTestApplication(Application::module) {
             handleRequest(HttpMethod.Get, "/converter?from=INCORRECT&to=USD").apply {
                 assertEquals(HttpStatusCode.BadRequest, response.status())
                 val expectedResponse = Response(
-                    errorMessage = "ControllerException: Wrong `from` parameter: `INCORRECT`"
+                    errorMessage = "common.ControllerException: Wrong `from` parameter: `INCORRECT`"
                 )
                 assertEquals(
                     Gson().toJson(expectedResponse),
@@ -37,12 +37,12 @@ class ConverterTest {
     }
 
     @Test
-    fun `Incorrect "to" parameter`() {
+    fun `Incorrect 'to' parameter`() {
         withTestApplication(Application::module) {
             handleRequest(HttpMethod.Get, "/converter?from=USD&to=INCORRECT").apply {
                 assertEquals(HttpStatusCode.BadRequest, response.status())
                 val expectedResponse = Response(
-                    errorMessage = "ControllerException: Wrong `to` parameter: `INCORRECT`"
+                    errorMessage = "common.ControllerException: Wrong `to` parameter: `INCORRECT`"
                 )
                 assertEquals(
                     Gson().toJson(expectedResponse),

@@ -1,3 +1,6 @@
+package remote
+
+import common.ConverterException
 import io.ktor.client.*
 import io.ktor.client.call.*
 import io.ktor.client.request.*
