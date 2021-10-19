@@ -28,10 +28,12 @@ dependencies {
 
     implementation("org.jetbrains.kotlinx:kotlinx-serialization-core:1.3.0")
     implementation(kotlin("stdlib-jdk8"))
+    implementation("io.ktor:ktor-gson:$ktor_version")
+    implementation("io.ktor:ktor-jackson:$ktor_version")
+    
+    testImplementation("org.mockito:mockito-core:2.1.0")
     testImplementation("org.jetbrains.kotlin:kotlin-test:$kotlin_version")
     testImplementation("io.ktor:ktor-server-test-host:$ktor_version")
-    implementation("io.ktor:ktor-gson:$ktor_version")
-    implementation("com.fasterxml.jackson.module:jackson-module-kotlin:2.11.1")
     testImplementation("org.assertj:assertj-core:3.6.1")
 }
 
