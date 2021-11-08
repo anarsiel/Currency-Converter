@@ -2,7 +2,12 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
     kotlin("jvm") version "1.5.30" // or kotlin("multiplatform") or any other kotlin plugin
+    id("org.jetbrains.kotlin.plugin.allopen") version "1.5.31"
     application
+}
+
+allOpen {
+    annotation("AllOpen")
 }
 
 group = "me.admin"
@@ -30,7 +35,10 @@ dependencies {
     implementation(kotlin("stdlib-jdk8"))
     implementation("io.ktor:ktor-gson:$ktor_version")
     implementation("io.ktor:ktor-jackson:$ktor_version")
-    
+    implementation("ch.qos.logback:logback-classic:1.2.6")
+    implementation("io.ktor:ktor-client-logging:$ktor_version")
+
+
     testImplementation("org.mockito:mockito-core:2.1.0")
     testImplementation("org.jetbrains.kotlin:kotlin-test:$kotlin_version")
     testImplementation("io.ktor:ktor-server-test-host:$ktor_version")

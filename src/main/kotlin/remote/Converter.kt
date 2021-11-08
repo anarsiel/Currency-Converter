@@ -33,7 +33,7 @@ class Converter(private val config: Config, private val httpClient: HttpClient) 
             val responseBody: ByteArray = httpResponse.receive()
             return responseBody.toString(Charsets.UTF_8)
         }  catch (e: Exception) {
-            throw ConverterException("Converter service internal error")
+            throw ConverterException(e.toString())
         }
     }
 }

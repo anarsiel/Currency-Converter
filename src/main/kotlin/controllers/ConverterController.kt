@@ -13,9 +13,12 @@ class ConverterController(private val converter: Converter, private val validato
         val fromCurrency = params["from"]!!
         val toCurrency = params["to"]!!
 
-        val rate = converter.convert(fromCurrency, toCurrency)
+        val rate = converter.convert(fromCurrency, toCurrency).toDouble()
+
         return SuccessfulConverterResponse(
-            "1 $fromCurrency = $rate $toCurrency",
+            fromCurrency,
+            toCurrency,
+            rate,
             null
         )
     }

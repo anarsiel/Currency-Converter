@@ -1,28 +1,25 @@
-import controllers.Controllers
-import io.ktor.application.*
 import io.ktor.http.*
 import io.ktor.server.testing.*
+import config.plugins
+import config.routing
 import org.assertj.core.api.Assertions.assertThat
 import kotlin.test.Test
-import org.mockito.Mockito
-import org.mockito.Mockito.mock
-import remote.Converter
 
 class ApplicationTest {
     private val dependencies = Dependencies()
-    private val controllers = Controllers(dependencies)
 
     @Test
     fun `Identical Correct Currencies`() {
         withTestApplication({
             plugins()
-            routing(controllers)
+            routing(dependencies)
         }) {
             handleRequest(HttpMethod.Get, "/convert?from=USD&to=USD").apply {
                 val expectedConverterResponse = """
                     |{
-                        |"response":"1 USD = 1 USD",
-                        |"errorMessage":null
+                        |"currencyFrom":"USD",
+                        |"currencyTo":"USD",
+                        |"rate":1.0
                     |}
                 """.trimMargin().filterNot { it == '\n' }
 
@@ -36,13 +33,12 @@ class ApplicationTest {
     fun `Incorrect 'from' parameter`() {
         withTestApplication({
             plugins()
-            routing(controllers)
+            routing(dependencies)
         }) {
             handleRequest(HttpMethod.Get, "/convert?from=INCORRECT&to=USD").apply {
                 val expectedConverterResponse = """
                     |{
-                        |"response":null,
-                        |"errorMessage":"core.ValidatorException: Wrong `from` parameter: `INCORRECT`"
+                        |"errorMessage":"Internal service error."
                     |}
                 """.trimMargin().filterNot { it == '\n' }
 
@@ -56,13 +52,12 @@ class ApplicationTest {
     fun `Incorrect 'to' parameter`() {
         withTestApplication({
             plugins()
-            routing(controllers)
+            routing(dependencies)
         }) {
             handleRequest(HttpMethod.Get, "/convert?from=USD&to=INCORRECT").apply {
                 val expectedConverterResponse = """
                     |{
-                        |"response":null,
-                        |"errorMessage":"core.ValidatorException: Wrong `to` parameter: `INCORRECT`"
+                        |"errorMessage":"Internal service error."
                     |}
                 """.trimMargin().filterNot { it == '\n' }
 
@@ -76,7 +71,7 @@ class ApplicationTest {
     fun `Page not found`() {
         withTestApplication({
             plugins()
-            routing(controllers)
+            routing(dependencies)
         }) {
             handleRequest(HttpMethod.Get, "/PaGeNoTfOuNd").apply {
                 assertThat(HttpStatusCode.NotFound).isEqualTo(response.status())
