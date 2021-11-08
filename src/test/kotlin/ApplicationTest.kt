@@ -1,3 +1,4 @@
+import controllers.Controllers
 import io.ktor.application.*
 import io.ktor.http.*
 import io.ktor.server.testing.*
@@ -8,11 +9,15 @@ import org.mockito.Mockito.mock
 import remote.Converter
 
 class ApplicationTest {
-//    val mk = mock<Converter>()
+    private val dependencies = Dependencies()
+    private val controllers = Controllers(dependencies)
 
     @Test
     fun `Identical Correct Currencies`() {
-        withTestApplication(Application::launch) {
+        withTestApplication({
+            plugins()
+            routing(controllers)
+        }) {
             handleRequest(HttpMethod.Get, "/convert?from=USD&to=USD").apply {
                 val expectedConverterResponse = """
                     |{
@@ -29,7 +34,10 @@ class ApplicationTest {
 
     @Test
     fun `Incorrect 'from' parameter`() {
-        withTestApplication(Application::launch) {
+        withTestApplication({
+            plugins()
+            routing(controllers)
+        }) {
             handleRequest(HttpMethod.Get, "/convert?from=INCORRECT&to=USD").apply {
                 val expectedConverterResponse = """
                     |{
@@ -46,7 +54,10 @@ class ApplicationTest {
 
     @Test
     fun `Incorrect 'to' parameter`() {
-        withTestApplication(Application::launch) {
+        withTestApplication({
+            plugins()
+            routing(controllers)
+        }) {
             handleRequest(HttpMethod.Get, "/convert?from=USD&to=INCORRECT").apply {
                 val expectedConverterResponse = """
                     |{
@@ -63,7 +74,10 @@ class ApplicationTest {
 
     @Test
     fun `Page not found`() {
-        withTestApplication(Application::launch) {
+        withTestApplication({
+            plugins()
+            routing(controllers)
+        }) {
             handleRequest(HttpMethod.Get, "/PaGeNoTfOuNd").apply {
                 assertThat(HttpStatusCode.NotFound).isEqualTo(response.status())
                 assertThat(response.content).isNull()

@@ -1,6 +1,5 @@
 import config.Config
 import controllers.Controllers
-import core.Dependencies
 import core.InternalServerException
 import core.RemoteException
 import io.ktor.application.*
@@ -9,13 +8,29 @@ import io.ktor.http.*
 import io.ktor.jackson.*
 import io.ktor.response.*
 import io.ktor.routing.*
+import io.ktor.server.engine.*
+import io.ktor.server.netty.*
 import remote.UnsuccessfulConverterResponse
 import routes.convertFromTo
 
 
-fun main(args: Array<String>): Unit = io.ktor.server.netty.EngineMain.main(args)
+fun main() {
+    val dependencies = Dependencies()
+    val controllers = Controllers(dependencies)
 
-fun Application.launch() {
+    embeddedServer(Netty, port = 8080) {
+        plugins()
+        routing(controllers)
+    }.start(wait = true)
+}
+
+fun Application.routing(controllers: Controllers) {
+    routing {
+        convertFromTo(controllers.converterController)
+    }
+}
+
+fun Application.plugins() {
     install(StatusPages) {
         exception<InternalServerException> { cause ->
             val response = UnsuccessfulConverterResponse(errorMessage = cause.toString())
@@ -30,14 +45,6 @@ fun Application.launch() {
 
     install(ContentNegotiation) {
         jackson()
-    }
-
-    val config = Config()
-    val dependencies = Dependencies(config)
-    val controllers = Controllers(dependencies)
-
-    routing {
-        convertFromTo(controllers.converterController)
     }
 }
 
