@@ -17,7 +17,7 @@ open class Converter(private val config: Config, private val httpClient: HttpCli
         return jsonAsString.split(":", "}")[1]
     }
 
-    suspend fun getListOfAllCurrencies(): Set<String> {
+    open suspend fun getListOfAllCurrencies(): Set<String> {
         val request = "${config.remoteConverterPrefix}/currencies?" +
                 "apiKey=${config.remoteConverterApiKey}"
         val jsonAsString = getAndToString(request)

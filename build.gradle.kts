@@ -7,7 +7,7 @@ plugins {
 }
 
 allOpen {
-    annotation("AllOpen2")
+    annotation("AllOpen")
 }
 
 group = "me.admin"
@@ -30,7 +30,7 @@ dependencies {
     implementation("io.ktor:ktor-html-builder:$ktor_version")
     implementation("io.ktor:ktor-client-serialization:$ktor_version")
     implementation("org.jetbrains.kotlinx:kotlinx-html-jvm:0.7.3")
-    implementation("org.slf4j:slf4j-api:2.0.0-alpha5")
+    implementation("org.slf4j:slf4j-api:1.7.32")
 
     implementation("org.jetbrains.kotlinx:kotlinx-serialization-core:1.3.0")
     implementation(kotlin("stdlib-jdk8"))

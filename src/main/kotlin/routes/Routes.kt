@@ -7,7 +7,8 @@ import io.ktor.routing.*
 
 fun Route.convertFromTo(converterController: ConverterController) {
     get("/convert") {
-        call.respond(converterController.convertFromTo(call.request.queryParameters))
+        val params = call.request.queryParameters
+        call.respond(converterController.convertFromTo(params["from"], params["to"]))
         call.application.environment.log.info("SuccessfulConverterResponse ${call.response}")
     }
 }

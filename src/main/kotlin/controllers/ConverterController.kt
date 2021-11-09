@@ -1,25 +1,20 @@
 package controllers
 
-import io.ktor.http.*
 import remote.Converter
 import remote.SuccessfulConverterResponse
 import validators.ConverterValidator
 
 class ConverterController(private val converter: Converter, private val validator: ConverterValidator) {
-    suspend fun convertFromTo(params: Parameters): SuccessfulConverterResponse {
+    suspend fun convertFromTo(fromCurrency: String?, toCurrency: String?): SuccessfulConverterResponse {
         val currencies = converter.getListOfAllCurrencies()
-        validator.validateConvertFromTo(params, currencies)
+        validator.validateConvertFromTo(fromCurrency, toCurrency, currencies)
 
-        val fromCurrency = params["from"]!!
-        val toCurrency = params["to"]!!
-
-        val rate = converter.convert(fromCurrency, toCurrency).toDouble()
+        val rate = converter.convert(fromCurrency!!, toCurrency!!).toDouble()
 
         return SuccessfulConverterResponse(
             fromCurrency,
             toCurrency,
-            rate,
-            null
+            rate
         )
     }
 }

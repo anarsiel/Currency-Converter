@@ -4,10 +4,7 @@ import core.ValidatorException
 import io.ktor.http.*
 
 open class ConverterValidator {
-    open fun validateConvertFromTo(params: Parameters, correctCurrencies: Set<String>) {
-        val fromCurrency = params["from"]
-        val toCurrency = params["to"]
-
+    open fun validateConvertFromTo(fromCurrency: String?, toCurrency: String?, correctCurrencies: Set<String>) {
         if (fromCurrency == null || !correctCurrencies.contains(fromCurrency)) {
             throw ValidatorException("Wrong `from` parameter: `$fromCurrency`")
         }

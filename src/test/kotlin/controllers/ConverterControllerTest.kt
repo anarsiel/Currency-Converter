@@ -10,6 +10,7 @@ import org.assertj.core.api.Assertions.assertThat
 import org.junit.Test
 import org.mockito.kotlin.*
 import remote.Converter
+import remote.SuccessfulConverterResponse
 import validators.ConverterValidator
 
 class ConverterControllerTest {
@@ -27,29 +28,15 @@ class ConverterControllerTest {
             plugins()
             routing(dependencies)
         }) {
-            val params = Parameters.build {
-                mapOf("from" to "USD", "to" to "USD")
-            }
-            val expectedConverterResponse = """
-                |{
-                    |"currencyFrom":"USD",
-                    |"currencyTo":"USD",
-                    |"rate":1.0
-                |}
-            """.trimMargin().filterNot { it == '\n' }
+            val expectedConverterResponse = SuccessfulConverterResponse(currencyFrom="USD", currencyTo="USD", rate=1.0)
 
             converter.stub {
                 onBlocking { converter.getListOfAllCurrencies() } doReturn(setOf("USD"))
                 onBlocking { converter.convert(any(), any()) } doReturn("1.0")
             }
 
-//            runBlocking {
-//                whenever(converter.getListOfAllCurrencies()).thenReturn(setOf("USD"))
-//                whenever(converter.convert(any(), any())).thenReturn("1.0")
-//            }
-
             runBlocking {
-                assertThat(converterController.convertFromTo(params))
+                assertThat(converterController.convertFromTo(fromCurrency = "USD", toCurrency = "USD"))
                     .isEqualTo(expectedConverterResponse)
             }
         }
