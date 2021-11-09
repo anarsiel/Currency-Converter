@@ -17,4 +17,4 @@ class Dependencies(
     private val converter: Converter = Converter(config, httpClient),
 
     val converterController: ConverterController = ConverterController(converter, converterValidator)
-){}
+)

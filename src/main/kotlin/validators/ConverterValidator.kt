@@ -1,7 +1,6 @@
 package validators
 
 import core.ValidatorException
-import io.ktor.http.*
 
 open class ConverterValidator {
     open fun validateConvertFromTo(fromCurrency: String?, toCurrency: String?, correctCurrencies: Set<String>) {
