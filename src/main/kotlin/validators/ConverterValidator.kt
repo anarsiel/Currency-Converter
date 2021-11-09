@@ -3,8 +3,8 @@ package validators
 import core.ValidatorException
 import io.ktor.http.*
 
-class ConverterValidator {
-    fun validateConvertFromTo(params: Parameters, correctCurrencies: Set<String>) {
+open class ConverterValidator {
+    open fun validateConvertFromTo(params: Parameters, correctCurrencies: Set<String>) {
         val fromCurrency = params["from"]
         val toCurrency = params["to"]
 

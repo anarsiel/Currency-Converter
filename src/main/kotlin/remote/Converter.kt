@@ -7,8 +7,8 @@ import io.ktor.client.call.*
 import io.ktor.client.request.*
 import io.ktor.client.statement.*
 
-class Converter(private val config: Config, private val httpClient: HttpClient) {
-    suspend fun convert(fromCurrency: String, toCurrency: String): String {
+open class Converter(private val config: Config, private val httpClient: HttpClient) {
+    open suspend fun convert(fromCurrency: String, toCurrency: String): String {
         val request = "${config.remoteConverterPrefix}/convert?" +
                 "q=${fromCurrency}_$toCurrency&" +
                 "compact=ultra" +

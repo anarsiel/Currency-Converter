@@ -5,7 +5,6 @@ import config.routing
 
 fun main() {
     with(Dependencies()) {
-
         embeddedServer(Netty, port = 8080) {
             plugins()
             routing(this@with)
