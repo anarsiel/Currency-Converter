@@ -9,6 +9,5 @@ fun Route.convertFromTo(converterController: ConverterController) {
     get("/convert") {
         val params = call.request.queryParameters
         call.respond(converterController.convertFromTo(params["from"], params["to"]))
-        call.application.environment.log.info("SuccessfulConverterResponse ${call.response}")
     }
 }
