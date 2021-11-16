@@ -1,7 +1,8 @@
 package config
 
+import core.IncorrectEndpointException
 import core.InternalServerException
-import core.RemoteException
+import core.UnavailableServiceException
 import io.ktor.application.*
 import io.ktor.features.*
 import io.ktor.http.*
@@ -13,14 +14,20 @@ import remote.UnsuccessfulConverterResponse
 fun Application.plugins() {
     install(StatusPages) {
         exception<InternalServerException> { cause ->
-            val response = UnsuccessfulConverterResponse(errorMessage = "Internal service error.")
+            val response = UnsuccessfulConverterResponse(errorMessage = "${cause.message}")
             call.respond(HttpStatusCode.InternalServerError, response)
             log.info("InternalServerException: ${cause.message}")
         }
 
-        exception<RemoteException> { cause ->
+        exception<UnavailableServiceException> { cause ->
             val response = UnsuccessfulConverterResponse(errorMessage = "Remote service internal error.")
             call.respond(HttpStatusCode.BadGateway, response)
+            log.info("UnavailableServiceException: ${cause.message}")
+        }
+
+        exception<IncorrectEndpointException> { cause ->
+            val response = UnsuccessfulConverterResponse(errorMessage = "Bad request to remote server")
+            call.respond(HttpStatusCode.BadRequest, response)
             log.info("RemoteException: ${cause.message}")
         }
     }

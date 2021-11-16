@@ -5,7 +5,8 @@ import com.xebialabs.restito.semantics.Action.stringContent
 import com.xebialabs.restito.semantics.Condition.method
 import com.xebialabs.restito.semantics.Condition.startsWithUri
 import com.xebialabs.restito.server.StubServer
-import core.ConverterException
+import core.IncorrectEndpointException
+import core.UnavailableServiceException
 import org.assertj.core.api.Assertions.assertThat
 import org.glassfish.grizzly.http.Method
 import org.junit.After
@@ -94,7 +95,7 @@ class ConverterTest {
                 stringContent(unexpectedServiceResponse)
             )
 
-        val exception = assertFailsWith<ConverterException> {
+        val exception = assertFailsWith<UnavailableServiceException> {
             converter.getListOfAllCurrencies()
         }
         assertThat("org.json.JSONException: JSONObject[\"results\"] not found.").isEqualTo(exception.message)
@@ -127,7 +128,7 @@ class ConverterTest {
                 stringContent(unexpectedServiceResponse)
             )
 
-        val exception = assertFailsWith<ConverterException> {
+        val exception = assertFailsWith<UnavailableServiceException> {
             converter.convert("USD", "RUB")
         }
         assertThat("org.json.JSONException: JSONObject[\"USD_RUB\"] not found.").isEqualTo(exception.message)
@@ -144,7 +145,7 @@ class ConverterTest {
                 stringContent(unexpectedUSDRUBRateResponse)
             )
 
-        val exception = assertFailsWith<ConverterException> {
+        val exception = assertFailsWith<IncorrectEndpointException> {
             converter.convert("USD", "RUB")
         }
         assertThat("java.lang.NumberFormatException: For input string: \"Not a number\"").isEqualTo(exception.message)

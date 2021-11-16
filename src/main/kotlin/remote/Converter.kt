@@ -1,6 +1,7 @@
 package remote
 
-import core.ConverterException
+import core.IncorrectEndpointException
+import core.UnavailableServiceException
 import org.json.JSONObject
 import java.net.URL
 
@@ -21,9 +22,9 @@ open class Converter(
             val jsonObject = JSONObject(URL(url).readText())
             return jsonObject["${fromCurrency}_${toCurrency}"].toString().toDouble()
         } catch (e: org.json.JSONException) {
-            throw ConverterException(e.toString())
+            throw UnavailableServiceException(e.toString())
         } catch (e: NumberFormatException) {
-            throw ConverterException(e.toString())
+            throw IncorrectEndpointException(e.toString())
         }
     }
 
@@ -34,7 +35,7 @@ open class Converter(
             val jsonObject = JSONObject(URL(url).readText())
             return JSONObject(jsonObject["results"].toString()).keySet()
         } catch (e: Exception) {
-            throw ConverterException(e.toString())
+            throw UnavailableServiceException(e.toString())
         }
     }
 }
