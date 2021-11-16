@@ -10,13 +10,9 @@ data class SuccessfulConverterResponse(
     val currencyFrom: String,
     val currencyTo: String,
     val rate: Double,
-    val errorMessage: String? = null,
 ) : Response
 
 @JsonInclude(Include.NON_NULL)
 data class UnsuccessfulConverterResponse(
-    val currencyFrom: String? = null,
-    val currencyTo: String? = null,
-    val rate: Double? = null,
     val errorMessage: String,
 ) : Response
