@@ -6,7 +6,7 @@ import org.json.JSONObject
 import java.net.URL
 
 open class Converter(
-    private val remoteConverterPrefix: String,
+    remoteConverterPrefix: String,
     private val remoteConverterApiKey: String,
 ) {
     private val allCurrenciesEndpoint = "${remoteConverterPrefix}/currencies"

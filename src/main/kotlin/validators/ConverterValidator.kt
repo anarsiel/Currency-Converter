@@ -11,6 +11,5 @@ open class ConverterValidator {
         if (toCurrency == null || !correctCurrencies.contains(toCurrency)) {
             throw ValidatorException("Wrong `to` parameter: `$toCurrency`")
         }
-
     }
 }
