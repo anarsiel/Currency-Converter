@@ -39,6 +39,8 @@ dependencies {
     implementation("ch.qos.logback:logback-classic:1.2.6")
     implementation("io.ktor:ktor-client-logging:$ktor_version")
     implementation("junit:junit:4.13.1")
+    implementation("com.xebialabs.restito:restito:0.9.4")
+    implementation("org.json:json:20210307")
 
 
     testImplementation("org.mockito:mockito-core:2.1.0")
