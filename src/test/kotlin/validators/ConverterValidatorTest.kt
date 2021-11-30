@@ -9,7 +9,7 @@ class ConverterValidatorTest {
     private val converterValidator = ConverterValidator()
 
     @Test
-    fun `OK Validation`(): Unit {
+    fun `OK Validation`() {
         converterValidator.validateConvertFromTo(
             fromCurrency = "USD",
             toCurrency = "RUB",
@@ -18,7 +18,7 @@ class ConverterValidatorTest {
     }
 
     @Test
-    fun `Incorrect toCurrency`(): Unit {
+    fun `Incorrect toCurrency`() {
         val exception = assertFailsWith<ValidatorException> {
             converterValidator.validateConvertFromTo(
                 fromCurrency = "USD",
@@ -26,11 +26,11 @@ class ConverterValidatorTest {
                 setOf("USD")
             )
         }
-        Assertions.assertThat("Wrong `to` parameter: `RUB`").isEqualTo(exception.message)
+        Assertions.assertThat(exception.message).isEqualTo("Wrong `to` parameter: `RUB`")
     }
 
     @Test
-    fun `Incorrect fromCurrency`(): Unit {
+    fun `Incorrect fromCurrency`() {
         val exception = assertFailsWith<ValidatorException> {
             converterValidator.validateConvertFromTo(
                 fromCurrency = "USD",
@@ -38,6 +38,6 @@ class ConverterValidatorTest {
                 setOf("RUB")
             )
         }
-        Assertions.assertThat("Wrong `from` parameter: `USD`").isEqualTo(exception.message)
+        Assertions.assertThat(exception.message).isEqualTo("Wrong `from` parameter: `USD`")
     }
 }
