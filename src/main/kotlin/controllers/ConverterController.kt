@@ -5,7 +5,7 @@ import remote.SuccessfulConverterResponse
 import validators.ConverterValidator
 
 class ConverterController(private val converter: Converter, private val validator: ConverterValidator) {
-    fun convertFromTo(fromCurrency: String?, toCurrency: String?): SuccessfulConverterResponse {
+    suspend fun convertFromTo(fromCurrency: String?, toCurrency: String?): SuccessfulConverterResponse {
         val currencies = converter.getListOfAllCurrencies()
         validator.validateConvertFromTo(fromCurrency, toCurrency, currencies)
 

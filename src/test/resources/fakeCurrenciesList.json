@@ -1,0 +1,14 @@
+{
+  "results": {
+    "RUB": {
+      "currencyName": "Russian Ruble",
+      "currencySymbol": "руб",
+      "id": "RUB"
+    },
+    "USD": {
+      "currencyName": "United States Dollar",
+      "currencySymbol": "${'$'}",
+      "id": "USD"
+    }
+  }
+}

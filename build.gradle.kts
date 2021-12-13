@@ -39,7 +39,6 @@ dependencies {
     implementation("ch.qos.logback:logback-classic:1.2.6")
     implementation("io.ktor:ktor-client-logging:$ktor_version")
     implementation("junit:junit:4.13.1")
-    implementation("com.xebialabs.restito:restito:0.9.4")
     implementation("org.json:json:20210307")
 
 
@@ -48,6 +47,7 @@ dependencies {
     testImplementation("io.ktor:ktor-server-test-host:$ktor_version")
     testImplementation("org.assertj:assertj-core:3.6.1")
     testImplementation("org.mockito.kotlin:mockito-kotlin:3.2.0")
+    testImplementation("io.ktor:ktor-client-mock:$ktor_version")
 }
 
 tasks.test {
