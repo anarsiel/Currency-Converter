@@ -40,7 +40,7 @@ dependencies {
     implementation("io.ktor:ktor-client-logging:$ktor_version")
     implementation("junit:junit:4.13.1")
     implementation("org.json:json:20210307")
-
+    implementation("com.google.guava:guava:11.0.2")
 
     testImplementation("org.mockito:mockito-core:2.1.0")
     testImplementation("org.jetbrains.kotlin:kotlin-test:$kotlin_version")

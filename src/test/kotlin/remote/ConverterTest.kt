@@ -6,10 +6,12 @@ import io.ktor.client.*
 import io.ktor.client.engine.mock.*
 import kotlinx.coroutines.runBlocking
 import org.assertj.core.api.Assertions.assertThat
+import org.json.JSONObject
 import org.junit.Test
 import java.io.File
 import kotlin.test.assertFailsWith
 
+@Suppress("UnstableApiUsage")
 class ConverterTest {
     private val resourcesPath = "src/test/resources"
 
@@ -102,6 +104,19 @@ class ConverterTest {
         }
     }
 
+    @Test
+    fun ` successful conversion response `() {
+        runBlocking {
+            assertThat(
+                healthyConverter
+                    .convert("USD", "RUB")
+                    .toString()
+            ).isEqualTo(
+                JSONObject(File("$resourcesPath/fakeUSDRUBResponse.json").readText())["USD_RUB"].toString()
+            )
+        }
+    }
+
 
     @Test
     fun ` unexpected service response on getListOfAllCurrencies `() {
@@ -143,6 +158,29 @@ class ConverterTest {
             }
             assertThat(exception.message)
                 .isEqualTo("java.lang.Exception: Client is dead")
+        }
+    }
+
+    @Test
+    fun ` successful caching currencies`() {
+        runBlocking {
+            healthyConverter.getListOfAllCurrencies()
+            assertThat(healthyConverter
+                .getSuccessfulRequestsCache()
+                .getIfPresent("$prefix/currencies?apiKey=$fakeRemoteConverterApiKey").toString()
+            ).isEqualTo(JSONObject(File("$resourcesPath/fakeCurrenciesList.json").readText()).toString())
+        }
+    }
+
+    @Test
+    fun ` successful caching rate`() {
+        runBlocking {
+            healthyConverter.convert("USD", "RUB")
+            assertThat(healthyConverter
+                .getSuccessfulRequestsCache()
+                .getIfPresent("$prefix/convert?q=USD_RUB&compact=ultra&apiKey=$fakeRemoteConverterApiKey")
+                .toString()
+            ).isEqualTo(JSONObject(File("$resourcesPath/fakeUSDRUBResponse.json").readText()).toString())
         }
     }
 }
