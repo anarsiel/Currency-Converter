@@ -39,15 +39,15 @@ dependencies {
     implementation("ch.qos.logback:logback-classic:1.2.6")
     implementation("io.ktor:ktor-client-logging:$ktor_version")
     implementation("junit:junit:4.13.1")
-    implementation("com.xebialabs.restito:restito:0.9.4")
     implementation("org.json:json:20210307")
-
+    implementation("com.google.guava:guava:11.0.2")
 
     testImplementation("org.mockito:mockito-core:2.1.0")
     testImplementation("org.jetbrains.kotlin:kotlin-test:$kotlin_version")
     testImplementation("io.ktor:ktor-server-test-host:$ktor_version")
     testImplementation("org.assertj:assertj-core:3.6.1")
     testImplementation("org.mockito.kotlin:mockito-kotlin:3.2.0")
+    testImplementation("io.ktor:ktor-client-mock:$ktor_version")
 }
 
 tasks.test {

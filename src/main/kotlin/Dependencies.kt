@@ -8,8 +8,9 @@ class Dependencies(
 
     private val converterValidator: ConverterValidator = ConverterValidator(),
     private val converter: Converter = Converter(
-        config.remoteConverterPrefix,
-        config.remoteConverterApiKey,
+        remoteConverterApiKey=config.remoteConverterApiKey,
+        remoteConverterPrefix=config.remoteConverterPrefix,
+        cacheDurationSec=config.converterCacheDurationSec,
     ),
 
     val converterController: ConverterController = ConverterController(converter, converterValidator)

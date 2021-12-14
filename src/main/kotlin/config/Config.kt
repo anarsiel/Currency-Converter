@@ -2,7 +2,8 @@ package config
 
 data class Config(
     val remoteConverterApiKey: String = generateRemoteConverterApiKey(),
-    val remoteConverterPrefix: String = generateRemoteConverterPrefix()
+    val remoteConverterPrefix: String = generateRemoteConverterPrefix(),
+    val converterCacheDurationSec: Long = 3600
 )
 
 private fun generateRemoteConverterApiKey(): String {
