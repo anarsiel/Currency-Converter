@@ -13,15 +13,16 @@ import java.util.concurrent.TimeUnit
 
 @Suppress("UnstableApiUsage")
 open class Converter(
-    remoteConverterPrefix: String,
     private val remoteConverterApiKey: String,
-    private val httpClient: HttpClient = HttpClient()
+    private val httpClient: HttpClient = HttpClient(),
+    remoteConverterPrefix: String,
+    cacheDurationSec: Long
 ) {
     private val allCurrenciesEndpoint = "${remoteConverterPrefix}/currencies"
     private val conversionEndpoint = "${remoteConverterPrefix}/convert"
 
     private val successfulRequestsCache: Cache<String, JSONObject> = CacheBuilder.newBuilder().maximumSize(100)
-        .expireAfterAccess(10, TimeUnit.HOURS)
+        .expireAfterAccess(cacheDurationSec, TimeUnit.SECONDS)
         .build()
 
     fun getSuccessfulRequestsCache() = successfulRequestsCache

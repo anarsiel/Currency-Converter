@@ -18,6 +18,7 @@ class ConverterTest {
     private val port = 30000
     private val fakeRemoteConverterApiKey = "fakeApi2390123456789"
     private val prefix = "http://localhost:$port"
+    private val cacheDurationSec: Long = 3600
 
     private val healthyClient = HttpClient(MockEngine) {
         engine {
@@ -72,29 +73,22 @@ class ConverterTest {
         }
     }
 
-    private val healthyConverter = Converter(
-        prefix,
-        fakeRemoteConverterApiKey,
-        healthyClient
-    )
+    private fun createConverter(httpClient: HttpClient): Converter {
+        return Converter(
+            remoteConverterApiKey=fakeRemoteConverterApiKey,
+            remoteConverterPrefix=prefix,
+            cacheDurationSec=cacheDurationSec,
+            httpClient = httpClient
+        )
+    }
 
-    private val unhealthyConverter = Converter(
-        prefix,
-        fakeRemoteConverterApiKey,
-        unhealthyClient
-    )
+    private val healthyConverter = createConverter(healthyClient)
 
-    private val unexpectedRateResponseConverter = Converter(
-        prefix,
-        fakeRemoteConverterApiKey,
-        unexpectedRateResponseClient
-    )
+    private val unhealthyConverter = createConverter(unhealthyClient)
 
-    private val deadClientConverter = Converter(
-        prefix,
-        fakeRemoteConverterApiKey,
-        deadClient
-    )
+    private val unexpectedRateResponseConverter = createConverter(unexpectedRateResponseClient)
+
+    private val deadClientConverter = createConverter(deadClient)
 
     @Test
     fun ` successful getListOfAllCurrencies response `() {
