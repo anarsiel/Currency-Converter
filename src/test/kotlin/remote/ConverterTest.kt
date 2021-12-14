@@ -177,4 +177,30 @@ class ConverterTest {
             ).isEqualTo(JSONObject(File("$resourcesPath/fakeUSDRUBResponse.json").readText()).toString())
         }
     }
+
+    @Test
+    fun ` successful cache currencies substitution `() {
+        runBlocking {
+            runBlocking {
+                healthyConverter.getListOfAllCurrencies()
+                assertThat(healthyConverter.getListOfAllCurrencies())
+                    .isEqualTo(setOf("USD", "RUB"))
+            }
+        }
+    }
+
+    @Test
+    fun ` successful cache conversion substitution `() {
+        runBlocking {
+            healthyConverter.convert("USD", "RUB")
+
+            assertThat(
+                healthyConverter
+                    .convert("USD", "RUB")
+                    .toString()
+            ).isEqualTo(
+                JSONObject(File("$resourcesPath/fakeUSDRUBResponse.json").readText())["USD_RUB"].toString()
+            )
+        }
+    }
 }
